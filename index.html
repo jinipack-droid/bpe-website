@@ -61,15 +61,26 @@
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-decoration: none;
     }
-    .nav-logo img {
-      height: 36px;
-      filter: brightness(0) invert(1);
-      transition: filter 0.3s;
+    .nav-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--cyan));
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Roboto', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.5px;
+      flex-shrink: 0;
+      transition: box-shadow 0.3s;
     }
-    nav.light .nav-logo img { filter: none; }
+    nav.light .nav-logo-icon { box-shadow: 0 2px 12px rgba(30,92,191,0.25); }
     .nav-brand {
       display: flex;
       flex-direction: column;
@@ -120,76 +131,75 @@
     }
     .nav-cta:hover { background: var(--cyan) !important; transform: translateY(-1px); }
 
-    /* ── HERO ── */
-    .hero {
+    /* ── HERO SLIDER ── */
+    .hero-slider {
       position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
+      width: 100%;
+      height: 100vh;
+      min-height: 600px;
       overflow: hidden;
       background: var(--blue-dark);
     }
-    .hero-bg {
+    .hero-slide {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, #0a1628 0%, #0d2144 40%, #0f3060 70%, #0a1628 100%);
-    }
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(46,124,246,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(46,124,246,0.08) 1px, transparent 1px);
-      background-size: 64px 64px;
-    }
-    .hero-glow {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(46,124,246,0.18) 0%, transparent 70%);
-      top: -100px;
-      right: -100px;
-      pointer-events: none;
-    }
-    .hero-glow2 {
-      position: absolute;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,194,224,0.12) 0%, transparent 70%);
-      bottom: 0;
-      left: 20%;
-      pointer-events: none;
-    }
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 120px 5% 80px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      display: flex;
       align-items: center;
-      width: 100%;
     }
-    .hero-badge {
+    .hero-slide.active { opacity: 1; z-index: 2; }
+    .hero-slide-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center top;
+      background-repeat: no-repeat;
+      transform: scale(1.05);
+      transition: transform 8s ease;
+    }
+    .hero-slide.active .hero-slide-bg {
+      transform: scale(1);
+    }
+    .hero-slide-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(8,18,40,0.88) 0%,
+        rgba(10,22,40,0.72) 45%,
+        rgba(8,18,40,0.45) 100%
+      );
+    }
+    .hero-slide-content {
+      position: relative;
+      z-index: 3;
+      max-width: 740px;
+      padding: 0 7%;
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+    }
+    .hero-slide.active .hero-slide-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .slide-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(46,124,246,0.15);
-      border: 1px solid rgba(46,124,246,0.3);
+      background: rgba(46,124,246,0.18);
+      border: 1px solid rgba(46,124,246,0.35);
       color: var(--cyan);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 20px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
-    .hero-badge::before {
+    .slide-badge::before {
       content: '';
       width: 6px;
       height: 6px;
@@ -201,28 +211,31 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.4; transform: scale(0.8); }
     }
-    .hero-title {
-      font-size: clamp(32px, 4.5vw, 56px);
+    .slide-title {
+      font-size: clamp(30px, 4.2vw, 58px);
       font-weight: 900;
       color: var(--white);
-      line-height: 1.2;
-      margin-bottom: 24px;
+      line-height: 1.18;
+      margin-bottom: 22px;
       word-break: keep-all;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.4);
     }
-    .hero-title .highlight {
-      background: linear-gradient(90deg, var(--blue-bright), var(--cyan));
+    .slide-title .hl {
+      background: linear-gradient(90deg, #4fa8f7, var(--cyan));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    .hero-desc {
+    .slide-desc {
       font-size: 16px;
-      color: rgba(255,255,255,0.65);
-      line-height: 1.85;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.9;
       margin-bottom: 40px;
       word-break: keep-all;
+      max-width: 520px;
     }
-    .hero-btns {
+    .slide-btns {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
@@ -230,7 +243,7 @@
     .btn-blue {
       background: var(--blue-bright);
       color: var(--white);
-      padding: 15px 36px;
+      padding: 14px 34px;
       border-radius: 8px;
       font-size: 15px;
       font-weight: 700;
@@ -243,80 +256,86 @@
       background: var(--cyan);
       border-color: var(--cyan);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(46,124,246,0.4);
+      box-shadow: 0 8px 24px rgba(46,124,246,0.45);
     }
     .btn-outline-white {
       background: transparent;
       color: var(--white);
-      padding: 15px 36px;
+      padding: 14px 34px;
       border-radius: 8px;
       font-size: 15px;
       font-weight: 600;
       text-decoration: none;
       display: inline-block;
       transition: all 0.3s;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(255,255,255,0.35);
     }
     .btn-outline-white:hover {
       border-color: var(--white);
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.1);
     }
 
-    /* 히어로 오른쪽 이미지 */
-    .hero-visual {
-      position: relative;
+    /* 슬라이더 컨트롤 */
+    .slider-controls {
+      position: absolute;
+      bottom: 44px;
+      left: 7%;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .slider-dots {
+      display: flex;
+      gap: 10px;
+    }
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      padding: 0;
+    }
+    .slider-dot.active {
+      background: var(--cyan);
+      width: 28px;
+      border-radius: 4px;
+    }
+    .slider-arrows {
+      display: flex;
+      gap: 10px;
+    }
+    .slider-arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--white);
+      font-size: 18px;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.3s;
     }
-    .hero-img-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-    }
-    .hero-img-main {
-      width: 100%;
-      border-radius: 20px;
-      display: block;
-      object-fit: cover;
-      aspect-ratio: 4/5;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
-    }
-    .hero-img-badge {
-      position: absolute;
-      bottom: 28px;
-      left: -24px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 14px;
-      padding: 16px 20px;
-      min-width: 180px;
-    }
-    .hero-img-badge .badge-num {
-      font-family: 'Roboto', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--cyan);
-      line-height: 1;
-    }
-    .hero-img-badge .badge-label {
-      font-size: 12px;
-      color: rgba(255,255,255,0.65);
-      margin-top: 4px;
-    }
-    .hero-img-badge2 {
-      position: absolute;
-      top: 28px;
-      right: -20px;
+    .slider-arrow:hover {
       background: var(--blue-bright);
-      border-radius: 12px;
-      padding: 14px 18px;
-      text-align: center;
+      border-color: var(--blue-bright);
     }
-    .hero-img-badge2 .badge-icon { font-size: 22px; margin-bottom: 4px; }
-    .hero-img-badge2 .badge-text { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 600; word-break: keep-all; }
-    .hero-card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .slider-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--blue-bright), var(--cyan));
+      width: 0%;
+      transition: width linear;
+      z-index: 10;
+    }
 
     /* ── STATS ── */
     .stats-section {
@@ -728,7 +747,7 @@
   <!-- NAV -->
   <nav id="navbar">
     <a class="nav-logo" href="#">
-      <img src="images/logo.png" alt="BPE 로고" />
+      <div class="nav-logo-icon">BPE</div>
       <div class="nav-brand">
         <span class="en">BPE CO.,LTD</span>
         <span class="kr">비피이주식회사</span>
@@ -743,62 +762,87 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-glow"></div>
-    <div class="hero-glow2"></div>
-    <div class="hero-inner">
-      <div class="hero-left">
-        <div class="hero-badge">Bio Plus Enhance</div>
-        <h1 class="hero-title">
-          바이오와 유통의<br />
-          경계를 넘어,<br />
-          <span class="highlight">새로운 가치를 창조합니다</span>
+  <!-- HERO SLIDER -->
+  <section class="hero-slider" id="home">
+
+    <!-- Slide 1 -->
+    <div class="hero-slide active">
+      <div class="hero-slide-bg" style="background-image: url('images/slide1.png');"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        <div class="slide-badge">Bio Plus Enhance</div>
+        <h1 class="slide-title">
+          바이오와 유통의 경계를 넘어,<br />
+          <span class="hl">새로운 가치를 창조합니다</span>
         </h1>
-        <p class="hero-desc">
-          비피이주식회사는 바이오 기반 제품 연구개발과<br />
-          강력한 온오프라인 유통 네트워크를 결합한<br />
+        <p class="slide-desc">
+          비피이주식회사는 바이오 기반 제품 연구개발과
+          강력한 온오프라인 유통 네트워크를 결합한
           하이브리드 전문 기업입니다.
         </p>
-        <div class="hero-btns">
+        <div class="slide-btns">
           <a href="#business" class="btn-blue">사업 영역 보기</a>
-          <a href="tel:010-5283-9991" class="btn-outline-white">📞 상담 문의</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-card-row">
-          <div class="hero-card">
-            <div class="hero-card-icon">🔬</div>
-            <div class="hero-card-title">R&amp;D</div>
-            <div class="hero-card-desc">바이오 소재 연구개발 및 제품화</div>
-          </div>
-          <div class="hero-card">
-            <div class="hero-card-icon">🌐</div>
-            <div class="hero-card-title">유통망</div>
-            <div class="hero-card-desc">국내외 온오프라인 판매 채널</div>
-          </div>
-        </div>
-        <div class="hero-card">
-          <div class="hero-card-icon">🤝</div>
-          <div class="hero-card-title">파트너십 구축</div>
-          <div class="hero-card-desc">제조사·브랜드·유통사를 연결하는 전략적 네트워크로 모든 이해관계자의 가치를 극대화합니다.</div>
-        </div>
-        <div class="hero-card-row">
-          <div class="hero-card">
-            <div class="hero-card-icon">📦</div>
-            <div class="hero-card-title">B2B/B2C</div>
-            <div class="hero-card-desc">기업 및 소비자 공급 라인</div>
-          </div>
-          <div class="hero-card">
-            <div class="hero-card-icon">🚀</div>
-            <div class="hero-card-title">글로벌</div>
-            <div class="hero-card-desc">해외 시장 진출 지원</div>
-          </div>
+          <a href="tel:010-5283-9991" class="btn-outline-white">상담 문의</a>
         </div>
       </div>
     </div>
+
+    <!-- Slide 2 -->
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('images/slide2.png');"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        <div class="slide-badge">Partnership</div>
+        <h1 class="slide-title">
+          신뢰를 기반으로,<br />
+          <span class="hl">함께 성장하는 파트너십</span>
+        </h1>
+        <p class="slide-desc">
+          제조사, 브랜드사, 유통사를 연결하는 전략적 네트워크로
+          모든 이해관계자의 비즈니스 가치를 극대화합니다.
+        </p>
+        <div class="slide-btns">
+          <a href="#contact" class="btn-blue">제휴 문의하기</a>
+          <a href="#about" class="btn-outline-white">회사 소개</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="hero-slide">
+      <div class="hero-slide-bg" style="background-image: url('images/slide3.png');"></div>
+      <div class="hero-slide-overlay"></div>
+      <div class="hero-slide-content">
+        <div class="slide-badge">Global Business</div>
+        <h1 class="slide-title">
+          아시아를 넘어,<br />
+          <span class="hl">글로벌 시장으로 도약합니다</span>
+        </h1>
+        <p class="slide-desc">
+          한국 우수 바이오 제품의 해외 수출과
+          글로벌 브랜드의 국내 수입 유통을 담당합니다.
+          검증된 글로벌 파트너 네트워크를 보유하고 있습니다.
+        </p>
+        <div class="slide-btns">
+          <a href="#business" class="btn-blue">글로벌 사업 보기</a>
+          <a href="tel:010-5283-9991" class="btn-outline-white">상담 문의</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 컨트롤 -->
+    <div class="slider-controls">
+      <div class="slider-dots">
+        <button class="slider-dot active" data-index="0"></button>
+        <button class="slider-dot" data-index="1"></button>
+        <button class="slider-dot" data-index="2"></button>
+      </div>
+      <div class="slider-arrows">
+        <button class="slider-arrow" id="prevSlide">&#8592;</button>
+        <button class="slider-arrow" id="nextSlide">&#8594;</button>
+      </div>
+    </div>
+    <div class="slider-progress" id="sliderProgress"></div>
   </section>
 
   <!-- STATS -->
@@ -989,13 +1033,13 @@
   </div>
 
   <script>
-    // 네비 스크롤 효과
+    // ── 네비 스크롤 효과 ──
     const nav = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('light', window.scrollY > 80);
     });
 
-    // 스크롤 애니메이션
+    // ── 스크롤 애니메이션 ──
     const fadeEls = document.querySelectorAll('.fade-up');
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -1007,7 +1051,7 @@
     }, { threshold: 0.1 });
     fadeEls.forEach(el => obs.observe(el));
 
-    // 부드러운 스크롤
+    // ── 부드러운 스크롤 ──
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
@@ -1015,6 +1059,62 @@
         if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
+
+    // ── 히어로 슬라이더 ──
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const progress = document.getElementById('sliderProgress');
+    const DURATION = 5000;
+    let current = 0;
+    let timer, progressTimer;
+
+    function goToSlide(idx) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+      resetProgress();
+    }
+
+    function resetProgress() {
+      progress.style.transition = 'none';
+      progress.style.width = '0%';
+      clearTimeout(progressTimer);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          progress.style.transition = 'width ' + DURATION + 'ms linear';
+          progress.style.width = '100%';
+        });
+      });
+    }
+
+    function startAuto() {
+      clearInterval(timer);
+      timer = setInterval(() => goToSlide(current + 1), DURATION);
+    }
+
+    document.getElementById('nextSlide').addEventListener('click', () => {
+      clearInterval(timer);
+      goToSlide(current + 1);
+      startAuto();
+    });
+    document.getElementById('prevSlide').addEventListener('click', () => {
+      clearInterval(timer);
+      goToSlide(current - 1);
+      startAuto();
+    });
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        clearInterval(timer);
+        goToSlide(parseInt(dot.dataset.index));
+        startAuto();
+      });
+    });
+
+    // 초기화
+    resetProgress();
+    startAuto();
   </script>
 </body>
 </html>
